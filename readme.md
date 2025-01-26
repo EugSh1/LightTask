@@ -1,7 +1,7 @@
 # LightTask
 
-A **task management application** to simplify task organization and improve productivity. This app allows users to
-create, manage, and categorize tasks with an intuitive and easy-to-use interface.
+A **full-stack task management application** to simplify task organization and improve productivity. This app allows
+users to create, manage, and categorize tasks with an intuitive and easy-to-use interface.
 
 ## Features
 
