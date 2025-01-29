@@ -11,7 +11,7 @@ interface IUseAuthStore {
 }
 
 const useAuthStore = create<IUseAuthStore>()((set) => ({
-    isAuthenticated: false,
+    isAuthenticated: undefined,
     set: (newValue) => set({ isAuthenticated: newValue })
 }));
 
@@ -34,7 +34,7 @@ export default function useAuth() {
                 }
             }
         })();
-    }, [location.pathname, authState.isAuthenticated, navigate]);
+    }, [location.pathname, navigate]);
 
     async function createUser(name: string, password: string): Promise<void> {
         try {

@@ -28,6 +28,7 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 -   **TypeScript**: For type safety and better development experience.
 -   **Zustand**: For lightweight state management.
 -   **Axios**: For HTTP requests.
+-   **Framer Motion**: For smooth and interactive animations.
 
 **Backend:**
 

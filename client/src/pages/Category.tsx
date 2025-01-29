@@ -61,7 +61,7 @@ export default function Category({ categoryType }: IProps) {
     }
 
     return (
-        <>
+        <main className="px-6">
             <h1 className="text-2xl font-bold text-text">
                 {categoryType === "allTasks" ? "All tasks" : decodedCategoryName}
             </h1>
@@ -87,6 +87,6 @@ export default function Category({ categoryType }: IProps) {
             >
                 <Plus className="text-text" />
             </button>
-        </>
+        </main>
     );
 }

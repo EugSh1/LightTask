@@ -20,7 +20,7 @@ export default function App() {
     return (
         <>
             <main className="flex gap-1">
-                {isAuthenticated && <Sidebar />}
+                {(isAuthenticated === true || isAuthenticated === undefined) && <Sidebar />}
                 <div className="flex-1">
                     <Routes>
                         <Route path="/" element={<Home />} />
