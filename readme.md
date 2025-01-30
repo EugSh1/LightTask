@@ -43,6 +43,8 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 -   **Vitest**: For unit testing the backend logic.
 -   **Supertest**: For testing HTTP endpoints.
 
+![Made with](https://skillicons.dev/icons?i=react,tailwindcss,typescript,nodejs,expressjs,prisma,sqlite,vitest)
+
 ## Usage
 
 1. **Authentication**:
@@ -54,16 +56,6 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
     - Use the sidebar to create and manage categories.
 4. **Search**:
     - Press the search icon or use the global command palette to find tasks or categories.
-
-## Made With
-
-Front-end:
-
-![Made with](https://skillicons.dev/icons?i=react,tailwindcss,typescript)
-
-Back-end:
-
-![Made with](https://skillicons.dev/icons?i=nodejs,expressjs,prisma,sqlite)
 
 ## License
 
