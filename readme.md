@@ -36,6 +36,7 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 -   **Express.js**: For building a RESTful API.
 -   **Prisma**: For database ORM.
 -   **SQLite**: For lightweight and portable database storage.
+-   **Zod**: For data validation and schema enforcement.
 
 **Testing:**
 
