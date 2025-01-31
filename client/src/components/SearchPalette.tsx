@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { ICategory } from "../types";
 import { useNavigate } from "react-router-dom";
 import useCategories from "../hooks/useCategories";
+import { AnimatePresence, m } from "framer-motion";
 
 export default function SearchPalette() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -48,13 +49,21 @@ export default function SearchPalette() {
     }
 
     return createPortal(
-        <>
+        <AnimatePresence>
             {isVisible && (
-                <div
+                <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                     className="w-screen h-screen bg-surface/20 fixed flex top-0 justify-center items-center z-50"
                     onClick={closeSearchPalette}
                 >
-                    <div
+                    <m.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        transition={{ type: "spring", duration: 0.2 }}
                         className="bg-surface-bright rounded-md shadow-md p-1 w-2/4 flex flex-col"
                         onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}
                     >
@@ -84,10 +93,10 @@ export default function SearchPalette() {
                                 </p>
                             )}
                         </div>
-                    </div>
-                </div>
+                    </m.div>
+                </m.div>
             )}
-        </>,
+        </AnimatePresence>,
         document.body
     );
 }
