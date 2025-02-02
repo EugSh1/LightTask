@@ -55,7 +55,7 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 3. **Category Management**:
     - Use the sidebar to create and manage categories.
 4. **Search**:
-    - Press the search icon or use the global command palette to find tasks or categories.
+    - Use the global command palette to find categories.
 
 ## License
 
