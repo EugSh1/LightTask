@@ -21,7 +21,7 @@ export default function App() {
         <>
             <main className="flex gap-1">
                 {(isAuthenticated === true || isAuthenticated === undefined) && <Sidebar />}
-                <div className="flex-1">
+                <div className="flex-1 h-screen overflow-auto">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/category/" element={<Category categoryType="allTasks" />} />

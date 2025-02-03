@@ -23,3 +23,9 @@ export interface IHomeCardButton {
     title: string;
     action: () => void;
 }
+
+export interface IUser {
+    id: string;
+    name: string;
+    password: string;
+}

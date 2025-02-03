@@ -1,97 +1,86 @@
-import { useEffect } from "react";
-import type { ICategory } from "../types";
-import axiosClient from "../utils/axiosClient";
 import handleAxiosError from "../utils/handleAxiosError";
-import { create } from "zustand";
 import { toast } from "react-toastify";
-
-interface IUseCategoriesStore {
-    categories: ICategory[];
-    set: (newCategories: ICategory[]) => void;
-    add: (newCategory: ICategory) => void;
-    rename: (id: string, name: string) => void;
-    remove: (id: string) => void;
-}
-
-const useCategoriesStore = create<IUseCategoriesStore>()((set) => ({
-    categories: [],
-    set: (newCategories) => set({ categories: newCategories }),
-    add: (newCategory) => set((state) => ({ categories: [...state.categories, newCategory] })),
-    rename: (id, name) =>
-        set((state) => ({
-            categories: state.categories.map((category) => (category.id === id ? { ...category, name } : category))
-        })),
-    remove: (id) => set((state) => ({ categories: state.categories.filter((category) => category.id !== id) }))
-}));
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import CategoryService from "./services/categoryService";
 
 export default function useCategories() {
-    const categories = useCategoriesStore();
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        (async () => {
-            await fetchCategories();
-        })();
-    }, []);
+    const { data: categories } = useQuery({
+        queryKey: ["categories"],
+        queryFn: CategoryService.getCategories,
+        initialData: []
+    });
 
-    async function createCategory(): Promise<void> {
+    async function getCategoryByName(name: string) {
+        if (!name.trim()) return null;
+
         try {
-            const name = prompt("Enter new category name");
-            if (!name || !name.trim()) return;
-
-            const { data } = await axiosClient.post("/category", { name });
-            categories.add(data);
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error adding category");
+            const category = await queryClient.fetchQuery({
+                queryKey: ["category", name],
+                queryFn: () => CategoryService.getCategoryByName({ name })
+            });
+            return category;
+        } catch (error) {
+            handleAxiosError(error, "Error fetching category");
+            return null;
         }
     }
 
-    async function getCategoryByName(name: string): Promise<ICategory> {
-        try {
-            const { data } = await axiosClient.get(`/category/${name}`);
-            return data;
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error getting category");
-            throw new Error("Error getting category");
+    const { mutate: createCategory } = useMutation({
+        mutationFn: CategoryService.createCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["categories"] });
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error creating category");
         }
-    }
+    });
 
-    async function fetchCategories(): Promise<void> {
-        try {
-            const { data } = await axiosClient.get("/category");
-            categories.set(data);
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error getting categories");
-        }
-    }
-
-    async function renameCategory(id: string): Promise<string | undefined> {
-        try {
-            const name = prompt("Enter new category name");
-            if (!name || !name.trim()) return;
-
-            const { data } = await axiosClient.put("/category", { id, name });
-            categories.rename(id, name);
-            return data.name;
-        } catch (error: unknown) {
+    const { mutateAsync: renameCategory } = useMutation({
+        mutationFn: CategoryService.renameCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["categories"] });
+        },
+        onError: (error) => {
             handleAxiosError(error, "Error renaming category");
         }
-    }
+    });
 
-    async function deleteCategory(id: string): Promise<void> {
-        try {
-            await axiosClient.delete(`/category/${id}`);
-            categories.remove(id);
-            toast.success("Category deleted");
-        } catch (error: unknown) {
+    const { mutate: deleteCategory } = useMutation({
+        mutationFn: CategoryService.deleteCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["categories"] });
+        },
+        onError: (error) => {
             handleAxiosError(error, "Error deleting category");
         }
+    });
+
+    function handleCreateCategory() {
+        const name = prompt("Enter new category name");
+        if (!name || !name.trim()) return;
+        createCategory({ name });
+    }
+
+    async function handleRenameCategory(id: string) {
+        const name = prompt("Enter new category name");
+        if (!name || !name.trim()) return;
+        const { name: newCategoryName } = await renameCategory({ id, name });
+        return newCategoryName;
+    }
+
+    function handleDeleteCategory(id: string) {
+        if (!confirm("Are you sure you want to delete the category?")) return;
+        deleteCategory({ id });
+        toast.success("Category deleted");
     }
 
     return {
-        categories: categories.categories,
+        categories,
         getCategoryByName,
-        createCategory,
-        renameCategory,
-        deleteCategory
+        createCategory: handleCreateCategory,
+        renameCategory: handleRenameCategory,
+        deleteCategory: handleDeleteCategory
     } as const;
 }

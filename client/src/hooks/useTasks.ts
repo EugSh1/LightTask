@@ -1,102 +1,52 @@
-import { useEffect } from "react";
-import type { ITask } from "../types";
-import axiosClient from "../utils/axiosClient";
-import { toast } from "react-toastify";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import TaskService from "./services/taskService";
 import handleAxiosError from "../utils/handleAxiosError";
-import { create } from "zustand";
-
-interface IUseTasksStore {
-    tasks: ITask[];
-    set: (newTasks: ITask[]) => void;
-    add: (newTask: ITask) => void;
-    toggle: (id: string, updatedTask: ITask) => void;
-    remove: (id: string) => void;
-}
-
-const useTasksStore = create<IUseTasksStore>()((set) => ({
-    tasks: [],
-    set: (newTasks) => set({ tasks: newTasks }),
-    add: (newTask) => set((state) => ({ tasks: [...state.tasks, newTask] })),
-    toggle: (id, updatedTask) =>
-        set((state) => ({
-            tasks: state.tasks.map((task) => (task.id === id ? updatedTask : task))
-        })),
-    remove: (id) => set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) }))
-}));
+import { toast } from "react-toastify";
 
 export default function useTasks(categoryName?: string) {
-    const tasks = useTasksStore();
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        (async () => {
-            await fetchTasks();
-        })();
-    }, [categoryName]);
+    const { data: tasks } = useQuery({
+        queryKey: ["tasks", categoryName],
+        queryFn: ({ queryKey }) => TaskService.getTasks(queryKey[1] as string),
+        initialData: []
+    });
 
-    async function fetchTasks(): Promise<void> {
-        try {
-            const { data } = await axiosClient.get(categoryName ? `/task/?categoryName=${categoryName}` : "/task");
-            tasks.set(data);
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error fetching tasks");
-            tasks.set([]);
+    const { mutate: createTask } = useMutation({
+        mutationFn: TaskService.createTask,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tasks", categoryName] });
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error creating task");
         }
-    }
+    });
 
-    async function createTask(name: string): Promise<ITask> {
-        try {
-            const { data } = await axiosClient.post("/task", { name });
-            tasks.add(data);
-            return data;
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error adding task");
-            throw new Error("Error adding task");
-        }
-    }
-
-    async function toggleTaskStatus(id: string) {
-        try {
-            const { data } = await axiosClient.put(`/task/status`, { id });
-            tasks.toggle(id, data);
-        } catch (error: unknown) {
+    const { mutate: toggleTaskStatus } = useMutation({
+        mutationFn: TaskService.toggleTaskStatus,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tasks", categoryName] });
+        },
+        onError: (error) => {
             handleAxiosError(error, "Error updating task");
         }
-    }
+    });
 
-    async function deleteTask(id: string): Promise<void> {
-        try {
-            await axiosClient.delete(`/task/${id}`);
-            tasks.remove(id);
+    const { mutate: deleteTask } = useMutation({
+        mutationFn: TaskService.deleteTask,
+        onSuccess: () => {
             toast.success("Task deleted");
-        } catch (error: unknown) {
+            queryClient.invalidateQueries({ queryKey: ["tasks", categoryName] });
+        },
+        onError: (error) => {
             handleAxiosError(error, "Error deleting task");
         }
-    }
-
-    async function assignTaskToCategory(taskId: string, categoryId: string): Promise<void> {
-        try {
-            await axiosClient.put(`/task/assign`, { taskId, categoryId });
-            fetchTasks();
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error assigning task");
-        }
-    }
-
-    async function unassignTaskFromCategory(taskId: string, categoryId: string): Promise<void> {
-        try {
-            await axiosClient.put(`/task/unassign`, { taskId, categoryId });
-            fetchTasks();
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error unassigning task");
-        }
-    }
+    });
 
     return {
-        tasks: tasks.tasks,
+        tasks,
         createTask,
         toggleTaskStatus,
-        deleteTask,
-        assignTaskToCategory,
-        unassignTaskFromCategory
+        deleteTask
     } as const;
 }

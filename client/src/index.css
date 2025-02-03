@@ -14,5 +14,5 @@
 }
 
 body {
-    @apply bg-background select-none;
+    @apply bg-background select-none overflow-hidden;
 }

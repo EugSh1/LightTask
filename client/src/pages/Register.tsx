@@ -6,7 +6,10 @@ export default function Register() {
     const { createUser } = useAuth();
 
     function handleSubmit(name: string, password: string): void {
-        createUser(name, password);
+        createUser({
+            name,
+            password
+        });
     }
 
     return (

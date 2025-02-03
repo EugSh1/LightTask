@@ -26,7 +26,7 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 -   **React**: For building the user interface.
 -   **Tailwind CSS**: For fast and modern styling.
 -   **TypeScript**: For type safety and better development experience.
--   **Zustand**: For lightweight state management.
+-   **React Query**: For data fetching and caching.
 -   **Axios**: For HTTP requests.
 -   **Framer Motion**: For smooth and interactive animations.
 

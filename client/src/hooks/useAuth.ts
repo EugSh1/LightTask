@@ -1,91 +1,89 @@
 import { useEffect } from "react";
-import axiosClient from "../utils/axiosClient";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import AuthService from "./services/authService";
 import { toast } from "react-toastify";
 import handleAxiosError from "../utils/handleAxiosError";
-import { create } from "zustand";
-
-interface IUseAuthStore {
-    isAuthenticated: boolean | undefined;
-    set: (newValue: boolean) => void;
-}
-
-const useAuthStore = create<IUseAuthStore>()((set) => ({
-    isAuthenticated: undefined,
-    set: (newValue) => set({ isAuthenticated: newValue })
-}));
 
 export default function useAuth() {
-    const authState = useAuthStore();
     const navigate = useNavigate();
     const location = useLocation();
+    const queryClient = useQueryClient();
+
+    const { data: isAuthenticated, isLoading } = useQuery({
+        queryKey: ["auth"],
+        queryFn: AuthService.getIsAuth
+    });
+
+    const { mutate: createUser } = useMutation({
+        mutationFn: AuthService.createUser,
+        onSuccess: () => {
+            toast.success("User successfully created");
+            navigate("/login");
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error creating user");
+        }
+    });
+
+    const { mutate: deleteUser } = useMutation({
+        mutationFn: AuthService.deleteUser,
+        onSuccess: (data) => {
+            toast.success(data.message);
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error deleting account");
+        }
+    });
+
+    const { mutate: logIn } = useMutation({
+        mutationFn: AuthService.logIn,
+        onSuccess: async (data) => {
+            toast.success(data.message);
+            await queryClient.invalidateQueries({ queryKey: ["auth"] });
+            navigate("/");
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error logging in");
+        }
+    });
+
+    const { mutate: logOut } = useMutation({
+        mutationFn: AuthService.logOut,
+        onSuccess: (data) => {
+            toast.success(data.message);
+            queryClient.invalidateQueries({ queryKey: ["auth"] });
+        },
+        onError: (error) => {
+            handleAxiosError(error, "Error logging out");
+        }
+    });
 
     const publicRoutes = ["/login", "/register"];
 
     useEffect(() => {
-        (async () => {
-            try {
-                await axiosClient.get("/user/check");
-                authState.set(true);
-            } catch {
-                authState.set(false);
-                if (!publicRoutes.includes(location.pathname) && !authState.isAuthenticated) {
-                    navigate("/login");
-                }
-            }
-        })();
-    }, [location.pathname, navigate]);
-
-    async function createUser(name: string, password: string): Promise<void> {
-        try {
-            await axiosClient.post("/user", {
-                name,
-                password
-            });
-            toast.success("User successfully created");
+        if (isLoading) return;
+        if (!publicRoutes.includes(location.pathname) && !isAuthenticated) {
             navigate("/login");
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error creating user");
         }
+    }, [location.pathname, navigate, isAuthenticated]);
+
+    function handleLogOut(showConfirmDialog = false): void {
+        if (showConfirmDialog && !confirm("Are you sure you want to log out?")) return;
+        logOut();
     }
 
-    async function logIn(name: string, password: string): Promise<void> {
-        try {
-            const { data } = await axiosClient.post("/user/login", {
-                name,
-                password
-            });
-            authState.set(true);
-            toast.success(data.message);
-            navigate("/");
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error logging in");
-        }
+    function handleDeleteUser(): void {
+        if (!confirm("Are you sure you want to delete your account?")) return;
+        deleteUser();
+        logOut();
     }
 
-    async function logOut(showConfirmDialog = false): Promise<void> {
-        try {
-            if (showConfirmDialog && !confirm("Are you sure you want to log out?")) return;
-            const { data } = await axiosClient.post("/user/logout");
-            authState.set(false);
-            toast.success(data.message);
-            navigate("/login");
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error logging out");
-        }
-    }
-
-    async function deleteUser(): Promise<void> {
-        try {
-            if (!confirm("Are you sure you want to delete your account?")) return;
-            const { data } = await axiosClient.delete("/user");
-            toast.success(data.message);
-            navigate("/register");
-            logOut();
-        } catch (error: unknown) {
-            handleAxiosError(error, "Error deleting account");
-        }
-    }
-
-    return { isAuthenticated: authState.isAuthenticated, createUser, logIn, logOut, deleteUser } as const;
+    return {
+        isAuthenticated: isLoading ? undefined : isAuthenticated,
+        createUser,
+        logIn,
+        logOut: handleLogOut,
+        deleteUser: handleDeleteUser
+    } as const;
 }

@@ -18,7 +18,7 @@ export default function Category({ categoryType }: IProps) {
     const { getCategoryByName } = useCategories();
     const decodedCategoryName = decodeURIComponent(categoryName!);
     const [animationParent] = useAutoAnimate({ duration: 150 });
-    const { tasks, createTask, toggleTaskStatus, assignTaskToCategory, deleteTask } = useTasks(
+    const { tasks, createTask, toggleTaskStatus, deleteTask } = useTasks(
         categoryType === "allTasks" ? undefined : decodedCategoryName
     );
 
@@ -42,18 +42,18 @@ export default function Category({ categoryType }: IProps) {
         const newTaskName = prompt("Enter new task name");
         if (!newTaskName || !newTaskName.trim()) return;
 
-        const newTask = await createTask(newTaskName.trim());
-        if (categoryData && categoryData?.id !== "0000") {
-            await assignTaskToCategory(newTask.id, categoryData.id);
-        }
+        createTask({
+            newTask: { name: newTaskName.trim() },
+            categoryId: categoryData!.id
+        });
     }
 
-    async function handleTaskMark(taskId: string): Promise<void> {
-        await toggleTaskStatus(taskId);
+    function handleTaskMark(id: string): void {
+        toggleTaskStatus({ id });
     }
 
-    async function handleTaskDelete(taskId: string): Promise<void> {
-        await deleteTask(taskId);
+    function handleTaskDelete(id: string): void {
+        deleteTask({ id });
     }
 
     if (!categoryData) {

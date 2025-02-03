@@ -6,7 +6,10 @@ export default function LogIn() {
     const { logIn } = useAuth();
 
     function handleSubmit(name: string, password: string): void {
-        logIn(name, password);
+        logIn({
+            name,
+            password
+        });
     }
 
     return (
