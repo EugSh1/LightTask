@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 export default function Register() {
     const { createUser } = useAuth();
 
-    function handleSubmit(name: string, password: string): void {
+    function handleSubmit(name: string, password: string) {
         createUser({
             name,
             password

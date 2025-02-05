@@ -38,7 +38,7 @@ export default function Category({ categoryType }: IProps) {
         })();
     }, [decodedCategoryName]);
 
-    async function handleCreateTask(): Promise<void> {
+    async function handleCreateTask() {
         const newTaskName = prompt("Enter new task name");
         if (!newTaskName || !newTaskName.trim()) return;
 
@@ -48,11 +48,11 @@ export default function Category({ categoryType }: IProps) {
         });
     }
 
-    function handleTaskMark(id: string): void {
+    function handleTaskMark(id: string) {
         toggleTaskStatus({ id });
     }
 
-    function handleTaskDelete(id: string): void {
+    function handleTaskDelete(id: string) {
         deleteTask({ id });
     }
 

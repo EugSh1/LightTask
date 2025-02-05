@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 export default function LogIn() {
     const { logIn } = useAuth();
 
-    function handleSubmit(name: string, password: string): void {
+    function handleSubmit(name: string, password: string) {
         logIn({
             name,
             password

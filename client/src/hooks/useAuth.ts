@@ -68,12 +68,12 @@ export default function useAuth() {
         }
     }, [location.pathname, navigate, isAuthenticated]);
 
-    function handleLogOut(showConfirmDialog = false): void {
+    function handleLogOut(showConfirmDialog = false) {
         if (showConfirmDialog && !confirm("Are you sure you want to log out?")) return;
         logOut();
     }
 
-    function handleDeleteUser(): void {
+    function handleDeleteUser() {
         if (!confirm("Are you sure you want to delete your account?")) return;
         deleteUser();
         logOut();

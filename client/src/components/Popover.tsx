@@ -22,7 +22,7 @@ export default function Popover({ items, closeFn, triggerRef }: Popup) {
         };
     }, []);
 
-    function handleItemClick(action: () => void): void {
+    function handleItemClick(action: () => void) {
         action();
         closeFn();
     }

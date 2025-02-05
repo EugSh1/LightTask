@@ -16,7 +16,7 @@ export default function Sidebar() {
 
     const iconStrokeWidth = 1.5;
 
-    async function handleRenameCategory(id: string, prevCategoryName: string): Promise<void> {
+    async function handleRenameCategory(id: string, prevCategoryName: string) {
         const newCategoryName = await renameCategory(id);
         if (!newCategoryName) return;
 
@@ -25,8 +25,8 @@ export default function Sidebar() {
         }
     }
 
-    async function handleDeleteCategory(id: string, prevCategoryName: string): Promise<void> {
-        await deleteCategory(id);
+    async function handleDeleteCategory(id: string, prevCategoryName: string) {
+        deleteCategory(id);
 
         if (`/category/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
             navigate("/");

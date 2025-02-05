@@ -9,16 +9,16 @@ interface IProps {
 }
 
 export default function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
-    function handleTaskMark(): void {
+    function handleTaskMark() {
         onTaskMark(task.id);
     }
 
-    function handleDeleteTask(event: MouseEvent<HTMLButtonElement>): void {
+    function handleDeleteTask(event: MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
         onTaskDelete(task.id);
     }
 
-    function handleKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+    function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
         if (event.code === "Enter" || event.code === "Space") {
             handleTaskMark();
         }

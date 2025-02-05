@@ -38,12 +38,12 @@ export default function SearchPalette() {
         if (isVisible) filterInputRef.current?.focus();
     }, [isVisible]);
 
-    function closeSearchPalette(): void {
+    function closeSearchPalette() {
         setIsVisible(false);
         setFilter("");
     }
 
-    function handleCategoryClick(name: string): void {
+    function handleCategoryClick(name: string) {
         navigate(`/category/${encodeURIComponent(name)}`);
         closeSearchPalette();
     }

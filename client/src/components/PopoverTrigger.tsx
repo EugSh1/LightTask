@@ -11,12 +11,12 @@ export default function PopoverTrigger({ items, children }: IProps) {
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const triggerRef = useRef<HTMLDivElement | null>(null);
 
-    function showPopover(event: MouseEvent<HTMLDivElement>): void {
+    function showPopover(event: MouseEvent<HTMLDivElement>) {
         event.preventDefault();
         setIsVisible(true);
     }
 
-    function hidePopover(): void {
+    function hidePopover() {
         setIsVisible(false);
     }
 
