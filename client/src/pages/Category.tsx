@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import useTasks from "../hooks/useTasks";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ICategory } from "../types";
 import { Plus } from "lucide-react";
 import TaskCard from "../components/TaskCard";
@@ -48,13 +48,19 @@ export default function Category({ categoryType }: IProps) {
         });
     }
 
-    function handleTaskMark(id: string) {
-        toggleTaskStatus({ id });
-    }
+    const handleTaskMark = useCallback(
+        (id: string) => {
+            toggleTaskStatus({ id });
+        },
+        [toggleTaskStatus]
+    );
 
-    function handleTaskDelete(id: string) {
-        deleteTask({ id });
-    }
+    const handleTaskDelete = useCallback(
+        (id: string) => {
+            deleteTask({ id });
+        },
+        [deleteTask]
+    );
 
     if (!categoryData) {
         return <Loader />;

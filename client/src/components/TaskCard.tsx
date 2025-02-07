@@ -1,4 +1,4 @@
-import { KeyboardEvent, MouseEvent } from "react";
+import { KeyboardEvent, memo, MouseEvent } from "react";
 import type { ITask } from "../types";
 import { Trash, Circle, CircleCheckBig } from "lucide-react";
 
@@ -8,7 +8,7 @@ interface IProps {
     onTaskDelete: (taskId: string) => void;
 }
 
-export default function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
+function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
     function handleTaskMark() {
         onTaskMark(task.id);
     }
@@ -55,3 +55,5 @@ export default function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
         </div>
     );
 }
+
+export default memo(TaskCard);
