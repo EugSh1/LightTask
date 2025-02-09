@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import useAuth from "../hooks/useAuth";
+import { ROUTE_PATHS } from "../routes";
 
 export default function Register() {
     const { createUser } = useAuth();
@@ -16,7 +17,7 @@ export default function Register() {
         <AuthForm
             title="Register"
             altLink={
-                <Link to="/login" className="text-text-dimmed underline">
+                <Link to={ROUTE_PATHS.LOGIN} className="text-text-dimmed underline">
                     or log in
                 </Link>
             }

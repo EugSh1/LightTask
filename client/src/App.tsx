@@ -1,14 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import useAuth from "./hooks/useAuth";
-import Home from "./pages/Home";
-import LogIn from "./pages/LogIn";
-import Category from "./pages/Category";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
 import Sidebar from "./components/Sidebar";
 import SearchPalette from "./components/SearchPalette";
 import Loader from "./components/Loader";
+import { routes } from "./routes";
 
 export default function App() {
     const { isAuthenticated } = useAuth();
@@ -20,15 +16,12 @@ export default function App() {
     return (
         <>
             <main className="flex gap-1">
-                {(isAuthenticated === true || isAuthenticated === undefined) && <Sidebar />}
+                {isAuthenticated !== false && <Sidebar />}
                 <div className="flex-1 h-screen overflow-auto">
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/category/" element={<Category categoryType="allTasks" />} />
-                        <Route path="/category/:categoryName" element={<Category />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<LogIn />} />
-                        <Route path="*" element={<NotFound />} />
+                        {routes.map(({ path, element }) => (
+                            <Route key={path} path={path} element={element} />
+                        ))}
                     </Routes>
                 </div>
             </main>

@@ -4,6 +4,7 @@ import { ICategory } from "../types";
 import { useNavigate } from "react-router-dom";
 import useCategories from "../hooks/useCategories";
 import { AnimatePresence, m } from "framer-motion";
+import { ROUTE_PATHS } from "../routes";
 
 export default function SearchPalette() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -44,7 +45,7 @@ export default function SearchPalette() {
     }
 
     function handleCategoryClick(name: string) {
-        navigate(`/category/${encodeURIComponent(name)}`);
+        navigate(`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`);
         closeSearchPalette();
     }
 

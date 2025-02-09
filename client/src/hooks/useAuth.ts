@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import AuthService from "./services/authService";
 import { toast } from "react-toastify";
 import handleAxiosError from "../utils/handleAxiosError";
+import { PUBLIC_ROUTES, ROUTE_PATHS } from "../routes";
 
 export default function useAuth() {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function useAuth() {
         mutationFn: AuthService.createUser,
         onSuccess: () => {
             toast.success("User successfully created");
-            navigate("/login");
+            navigate(ROUTE_PATHS.LOGIN);
         },
         onError: (error) => {
             handleAxiosError(error, "Error creating user");
@@ -41,7 +42,7 @@ export default function useAuth() {
         onSuccess: async (data) => {
             toast.success(data.message);
             await queryClient.invalidateQueries({ queryKey: ["auth"] });
-            navigate("/");
+            navigate(ROUTE_PATHS.HOME);
         },
         onError: (error) => {
             handleAxiosError(error, "Error logging in");
@@ -59,12 +60,10 @@ export default function useAuth() {
         }
     });
 
-    const publicRoutes = ["/login", "/register"];
-
     useEffect(() => {
         if (isLoading) return;
-        if (!publicRoutes.includes(location.pathname) && !isAuthenticated) {
-            navigate("/login");
+        if (!PUBLIC_ROUTES.some((route) => route === location.pathname) && !isAuthenticated) {
+            navigate(ROUTE_PATHS.LOGIN);
         }
     }, [location.pathname, navigate, isAuthenticated]);
 

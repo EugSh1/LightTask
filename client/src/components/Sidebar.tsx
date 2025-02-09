@@ -6,6 +6,7 @@ import { LogOut, Trash2, Pencil, UserRoundX, PanelRightOpen, PanelRightClose } f
 import useAuth from "../hooks/useAuth";
 import { useState } from "react";
 import { m } from "framer-motion";
+import { ROUTE_PATHS } from "../routes";
 
 export default function Sidebar() {
     const location = useLocation();
@@ -20,16 +21,16 @@ export default function Sidebar() {
         const newCategoryName = await renameCategory(id);
         if (!newCategoryName) return;
 
-        if (`/category/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
-            navigate(`/category/${encodeURIComponent(newCategoryName)}`);
+        if (`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
+            navigate(`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(newCategoryName)}`);
         }
     }
 
     async function handleDeleteCategory(id: string, prevCategoryName: string) {
         deleteCategory(id);
 
-        if (`/category/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
-            navigate("/");
+        if (`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
+            navigate(ROUTE_PATHS.HOME);
         }
     }
 
@@ -74,7 +75,7 @@ export default function Sidebar() {
                     <div className="flex flex-col bg-surface-bright sticky top-0 z-50 mb-2 py-1">
                         <PopoverTrigger items={accountItems}>
                             <Link
-                                to="/"
+                                to={ROUTE_PATHS.HOME}
                                 className="text-text text-2xl text-center font-semibold mb-1 rounded-md focus-visible:outline focus-visible:outline-primary"
                             >
                                 LightTask
@@ -85,9 +86,9 @@ export default function Sidebar() {
                         </button>
                     </div>
                     <Link
-                        to={"/category"}
+                        to={ROUTE_PATHS.CATEGORY}
                         className={`text-text-dimmed p-1 block w-full rounded truncate focus-visible:outline focus-visible:outline-primary ${getActiveClass(
-                            "/category"
+                            ROUTE_PATHS.CATEGORY
                         )}`}
                         title="All tasks"
                     >
@@ -96,9 +97,9 @@ export default function Sidebar() {
                     {categories.map(({ id, name }) => (
                         <PopoverTrigger key={name} items={createCategoryPopoverItems(id, name)}>
                             <Link
-                                to={`/category/${encodeURIComponent(name)}`}
+                                to={`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`}
                                 className={`text-text-dimmed p-1 block w-full rounded truncate focus-visible:outline focus-visible:outline-primary ${getActiveClass(
-                                    `/category/${encodeURIComponent(name)}`
+                                    `${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`
                                 )}`}
                                 title={name}
                             >
