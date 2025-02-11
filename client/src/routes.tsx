@@ -1,9 +1,5 @@
-import Home from "./pages/Home";
-import LogIn from "./pages/LogIn";
-import Category from "./pages/Category";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
-import { IRoute } from "./types";
+import { Home, LogIn, Category, Register, NotFound } from "./pages";
+import type { IRoute } from "./types";
 
 export const ROUTE_PATHS = {
     HOME: "/",

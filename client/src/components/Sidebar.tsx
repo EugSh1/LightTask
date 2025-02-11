@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 import { useState } from "react";
 import { m } from "framer-motion";
 import { ROUTE_PATHS } from "../routes";
+import SidebarItem from "./SidebarItem";
 
 export default function Sidebar() {
     const location = useLocation();
@@ -95,17 +96,13 @@ export default function Sidebar() {
                         All tasks
                     </Link>
                     {categories.map(({ id, name }) => (
-                        <PopoverTrigger key={name} items={createCategoryPopoverItems(id, name)}>
-                            <Link
-                                to={`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`}
-                                className={`text-text-dimmed p-1 block w-full rounded truncate focus-visible:outline focus-visible:outline-primary ${getActiveClass(
-                                    `${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`
-                                )}`}
-                                title={name}
-                            >
-                                {name}
-                            </Link>
-                        </PopoverTrigger>
+                        <SidebarItem
+                            key={id}
+                            id={id}
+                            name={name}
+                            createCategoryPopoverItemsFn={createCategoryPopoverItems}
+                            getActiveClassFn={getActiveClass}
+                        />
                     ))}
                 </div>
 

@@ -9,7 +9,7 @@ interface ICreateTask {
 export default class TaskService {
     static async createTask({ newTask, categoryId }: ICreateTask) {
         const { data } = await axiosClient.post<ITask>("/task", newTask);
-        if (categoryId !== "0000") {
+        if (categoryId !== "all-tasks") {
             await axiosClient.put(`/task/assign`, { taskId: data.id, categoryId });
         }
         return null;

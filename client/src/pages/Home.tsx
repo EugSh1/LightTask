@@ -1,6 +1,6 @@
-import HomeCard from "../components/HomeCard";
 import useAuth from "../hooks/useAuth";
 import { getGreeting, getRandomTip } from "../utils/utils";
+import HomeCard from "../components/HomeCard";
 
 export default function Home() {
     const { logOut, deleteUser } = useAuth();

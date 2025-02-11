@@ -1,4 +1,4 @@
-import { IHomeCardButton } from "../types";
+import type { IHomeCardButton } from "../types";
 
 interface IProps {
     title: string;

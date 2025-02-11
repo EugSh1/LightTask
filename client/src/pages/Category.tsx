@@ -1,22 +1,28 @@
 import { useParams } from "react-router-dom";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import useTasks from "../hooks/useTasks";
+import useCategories from "../hooks/useCategories";
 import { useCallback, useEffect, useState } from "react";
 import type { ICategory } from "../types";
 import { Plus } from "lucide-react";
 import TaskCard from "../components/TaskCard";
-import useCategories from "../hooks/useCategories";
 import Loader from "../components/Loader";
 
 interface IProps {
     categoryType?: "allTasks";
 }
 
+const allTasksCategory: ICategory = {
+    id: "all-tasks",
+    name: "All tasks",
+    userId: "all-tasks"
+};
+
 export default function Category({ categoryType }: IProps) {
     const { categoryName } = useParams();
     const [categoryData, setCategoryData] = useState<ICategory | null>(null);
     const { getCategoryByName } = useCategories();
-    const decodedCategoryName = decodeURIComponent(categoryName!);
+    const decodedCategoryName = categoryName ? decodeURIComponent(categoryName) : "";
     const [animationParent] = useAutoAnimate({ duration: 150 });
     const { tasks, createTask, toggleTaskStatus, deleteTask } = useTasks(
         categoryType === "allTasks" ? undefined : decodedCategoryName
@@ -24,11 +30,7 @@ export default function Category({ categoryType }: IProps) {
 
     useEffect(() => {
         if (categoryType === "allTasks") {
-            setCategoryData({
-                id: "0000",
-                name: "All tasks",
-                userId: "0000"
-            });
+            setCategoryData(allTasksCategory);
             return;
         }
 
@@ -40,27 +42,16 @@ export default function Category({ categoryType }: IProps) {
 
     async function handleCreateTask() {
         const newTaskName = prompt("Enter new task name");
-        if (!newTaskName || !newTaskName.trim()) return;
+        if (!newTaskName || !newTaskName.trim() || !categoryData) return;
 
         createTask({
             newTask: { name: newTaskName.trim() },
-            categoryId: categoryData!.id
+            categoryId: categoryData.id
         });
     }
 
-    const handleTaskMark = useCallback(
-        (id: string) => {
-            toggleTaskStatus({ id });
-        },
-        [toggleTaskStatus]
-    );
-
-    const handleTaskDelete = useCallback(
-        (id: string) => {
-            deleteTask({ id });
-        },
-        [deleteTask]
-    );
+    const handleTaskMark = useCallback((id: string) => toggleTaskStatus({ id }), [toggleTaskStatus]);
+    const handleTaskDelete = useCallback((id: string) => deleteTask({ id }), [deleteTask]);
 
     if (!categoryData) {
         return <Loader />;

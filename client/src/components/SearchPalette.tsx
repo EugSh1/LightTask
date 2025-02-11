@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ICategory } from "../types";
+import type { ICategory } from "../types";
 import { useNavigate } from "react-router-dom";
 import useCategories from "../hooks/useCategories";
 import { AnimatePresence, m } from "framer-motion";
