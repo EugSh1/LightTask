@@ -8,6 +8,7 @@ import { useState } from "react";
 import { m } from "framer-motion";
 import { ROUTE_PATHS } from "../routes";
 import SidebarItem from "./SidebarItem";
+import Button from "./Button";
 
 export default function Sidebar() {
     const location = useLocation();
@@ -82,9 +83,7 @@ export default function Sidebar() {
                                 LightTask
                             </Link>
                         </PopoverTrigger>
-                        <button className="bg-primary rounded-md p-1 text-text font-semibold" onClick={createCategory}>
-                            New category
-                        </button>
+                        <Button onClick={createCategory}>New category</Button>
                     </div>
                     <Link
                         to={ROUTE_PATHS.CATEGORY}

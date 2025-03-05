@@ -1,4 +1,5 @@
 import { FormEvent, ReactNode, useEffect, useRef } from "react";
+import Button from "./Button";
 
 interface IProps {
     title: string;
@@ -53,9 +54,7 @@ export default function AuthForm({ title, altLink, onSubmit }: IProps) {
                     className="bg-surface-bright p-1 text-text placeholder:text-text-dimmed rounded-md focus-visible:outline outline-primary invalid:outline-red-300"
                     ref={passwordInputRef}
                 />
-                <button type="submit" className="bg-primary text-text font-semibold p-1 rounded-md">
-                    Submit
-                </button>
+                <Button type="submit">Submit</Button>
             </form>
         </main>
     );

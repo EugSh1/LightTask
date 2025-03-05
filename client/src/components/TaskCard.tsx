@@ -1,6 +1,7 @@
 import { KeyboardEvent, memo, MouseEvent } from "react";
 import type { ITask } from "../types";
 import { Trash, Circle, CircleCheckBig } from "lucide-react";
+import clsx from "clsx";
 
 interface IProps {
     task: ITask;
@@ -37,9 +38,11 @@ function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
             <div className="flex gap-2 items-center">
                 {task.isDone ? <CircleCheckBig className="text-text-dimmed" /> : <Circle className="text-text" />}
                 <p
-                    className={`${task.isDone ? "text-text-dimmed" : "text-text"} text-left flex-1 ${
-                        task.isDone ? "line-through" : ""
-                    }`}
+                    className={clsx(
+                        task.isDone ? "text-text-dimmed" : "text-text",
+                        "text-left flex-1",
+                        task.isDone && "line-through"
+                    )}
                 >
                     {task.name}
                 </p>

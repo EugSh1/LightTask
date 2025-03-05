@@ -25,7 +25,7 @@ export default function Home() {
                     description="Log out or delete your account with a single click."
                     buttons={accountButtons}
                 />
-                <HomeCard title="Tips" description={getRandomTip()} buttons={[]} />
+                <HomeCard title="Tips" description={getRandomTip()} />
                 <HomeCard
                     title="View on GitHub"
                     description="View the project's source code on GitHub."

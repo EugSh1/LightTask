@@ -1,12 +1,13 @@
 import type { IHomeCardButton } from "../types";
+import Button from "./Button";
 
 interface IProps {
     title: string;
     description: string;
-    buttons: IHomeCardButton[];
+    buttons?: IHomeCardButton[];
 }
 
-export default function HomeCard({ title, description, buttons }: IProps) {
+export default function HomeCard({ title, description, buttons = [] }: IProps) {
     return (
         <div className="bg-surface rounded-md p-2 w-48 shadow-sm aspect-square flex flex-col justify-between">
             <div>
@@ -15,13 +16,9 @@ export default function HomeCard({ title, description, buttons }: IProps) {
             </div>
             <div className="flex flex-col gap-1">
                 {buttons.map(({ title, action }, index) => (
-                    <button
-                        key={index}
-                        className="bg-primary rounded-md px-3 py-1 text-text font-semibold w-fit block"
-                        onClick={action}
-                    >
+                    <Button key={index} className="px-3 py-1 w-fit block" onClick={action}>
                         {title}
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>

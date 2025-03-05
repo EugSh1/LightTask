@@ -13,6 +13,7 @@
         "@formkit/auto-animate": "^0.8.2",
         "@tanstack/react-query": "^5.66.0",
         "axios": "^1.7.9",
+        "clsx": "^2.1.1",
         "framer-motion": "^12.0.6",
         "lucide-react": "^0.471.1",
         "react": "^18.3.1",
