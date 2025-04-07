@@ -12,7 +12,7 @@ if (!JWT_SECRET) {
 }
 
 export default class AuthService {
-    public static async createUser(name: string, password: string): Promise<void> {
+    static async createUser(name: string, password: string): Promise<void> {
         try {
             if (await this.checkIfNameTaken(name)) {
                 throw new HTTPError("A user with this name already exists", 400);
@@ -31,7 +31,7 @@ export default class AuthService {
         }
     }
 
-    public static async logIn(name: string, password: string): Promise<string> {
+    static async logIn(name: string, password: string): Promise<string> {
         try {
             const user = await prisma.user.findUnique({
                 where: { name }
@@ -54,7 +54,7 @@ export default class AuthService {
         }
     }
 
-    public static async deleteUser(id: string): Promise<void> {
+    static async deleteUser(id: string): Promise<void> {
         try {
             await prisma.user.delete({
                 where: { id }
@@ -64,7 +64,7 @@ export default class AuthService {
         }
     }
 
-    public static async checkIfNameTaken(name: string) {
+    static async checkIfNameTaken(name: string) {
         const user = await prisma.user.findFirst({
             where: { name }
         });

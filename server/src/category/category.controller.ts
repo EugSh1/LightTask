@@ -4,7 +4,7 @@ import { catchErrors } from "../utils/errorUtils.js";
 import { categorySchema, newCategorySchema } from "./category.schema.js";
 
 export default class CategoryController {
-    public static async getCategories(req: Request, res: Response): Promise<void> {
+    static async getCategories(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
 
@@ -13,7 +13,7 @@ export default class CategoryController {
         });
     }
 
-    public static async getCategory(req: Request, res: Response): Promise<void> {
+    static async getCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const name = req.params.name;
@@ -23,7 +23,7 @@ export default class CategoryController {
         });
     }
 
-    public static async createCategory(req: Request, res: Response): Promise<void> {
+    static async createCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = newCategorySchema.parse(req.body);
@@ -34,7 +34,7 @@ export default class CategoryController {
         });
     }
 
-    public static async updateCategory(req: Request, res: Response): Promise<void> {
+    static async updateCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = categorySchema.parse(req.body);
@@ -45,7 +45,7 @@ export default class CategoryController {
         });
     }
 
-    public static async deleteCategory(req: Request, res: Response): Promise<void> {
+    static async deleteCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const id = req?.params.id;

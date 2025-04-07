@@ -4,7 +4,7 @@ import { catchErrors } from "../utils/errorUtils.js";
 import { userSchema } from "./auth.schema.js";
 
 export default class AuthController {
-    public static async createUser(req: Request, res: Response): Promise<void> {
+    static async createUser(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const parsedBody = userSchema.parse(req.body);
             const { name, password } = parsedBody;
@@ -14,7 +14,7 @@ export default class AuthController {
         });
     }
 
-    public static async logIn(req: Request, res: Response): Promise<void> {
+    static async logIn(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const parsedBody = userSchema.parse(req.body);
             const { name, password } = parsedBody;
@@ -31,12 +31,12 @@ export default class AuthController {
         });
     }
 
-    public static async logOut(_req: Request, res: Response): Promise<void> {
+    static async logOut(_req: Request, res: Response): Promise<void> {
         res.clearCookie("token");
         res.status(200).json({ message: "Successfully logged out" });
     }
 
-    public static async deleteUser(req: Request, res: Response): Promise<void> {
+    static async deleteUser(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
 
@@ -45,7 +45,7 @@ export default class AuthController {
         });
     }
 
-    public static async checkAuth(_req: Request, res: Response): Promise<void> {
+    static async checkAuth(_req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             res.sendStatus(200);
         });

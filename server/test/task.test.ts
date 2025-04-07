@@ -4,15 +4,17 @@ import { describe, it, expect, expectTypeOf, afterAll, beforeAll } from "vitest"
 import { Task } from "@prisma/client";
 import clearDatabase from "./utils/clearDatabase.js";
 import createTestUser from "./utils/createTestUser.js";
+import { Server } from "http";
 
-let server: any;
-let baseURL: any;
+let server: Server;
+let baseURL: string;
 let tokenCookie: string;
 
 describe("Test operations with tasks", () => {
     beforeAll(async () => {
         server = app.listen(0);
-        const { port } = server.address();
+        const address = server.address();
+        const port = typeof address === "object" && address ? address.port : 0;
         baseURL = `http://localhost:${port}`;
         await clearDatabase();
         ({ tokenCookie } = await createTestUser());
@@ -24,7 +26,10 @@ describe("Test operations with tasks", () => {
     });
 
     it("Should respond with an error if you submit a non-existent category name when receiving issues by category name", async () => {
-        await request(baseURL).get("/task/non-existent-category-id").set("Cookie", tokenCookie).expect(404);
+        await request(baseURL)
+            .get("/task/non-existent-category-id")
+            .set("Cookie", tokenCookie)
+            .expect(404);
     });
 
     it("Should add a task properly", async () => {
@@ -51,7 +56,11 @@ describe("Test operations with tasks", () => {
 
     it("Should respond with an error if you send an invalid data when adding a new task", async () => {
         await request(baseURL).post("/task").set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).post("/task").send({ name: "" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .post("/task")
+            .send({ name: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
         await request(baseURL)
             .post("/task")
             .send({ name: "t".repeat(129) })
@@ -91,7 +100,11 @@ describe("Test operations with tasks", () => {
     });
 
     it("Should respond with an error if you send an empty task id when switching task completion status", async () => {
-        await request(baseURL).put("/task/status").send({ name: "" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .put("/task/status")
+            .send({ name: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
     });
 
     it("Should respond with an error if you submit a non-existent task id when switching task completion status", async () => {
@@ -124,7 +137,10 @@ describe("Test operations with tasks", () => {
     });
 
     it("Should respond with an error if you submit a non-existent task id when deleting a task", async () => {
-        await request(baseURL).delete("/task/non-existent-id").set("Cookie", tokenCookie).expect(500);
+        await request(baseURL)
+            .delete("/task/non-existent-id")
+            .set("Cookie", tokenCookie)
+            .expect(500);
     });
 
     it("Should assign a task to a category properly", async () => {
@@ -156,14 +172,24 @@ describe("Test operations with tasks", () => {
             .expect(200);
         expectTypeOf(tasksByCategoryNameResponse.body).toMatchTypeOf<Task[]>();
 
-        const assignedCategory = tasksByCategoryNameResponse.body.find((task: Task) => task.id === newTaskId);
+        const assignedCategory = tasksByCategoryNameResponse.body.find(
+            (task: Task) => task.id === newTaskId
+        );
         expect(assignedCategory).not.toBeUndefined();
     });
 
     it("Should respond with an error if you send an empty request body, taskId or categoryId when assigning a task to a category", async () => {
         await request(baseURL).put("/task/assign").set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).put("/task/assign").send({ taskId: "" }).set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).put("/task/assign").send({ taskId: "test" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .put("/task/assign")
+            .send({ taskId: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
+        await request(baseURL)
+            .put("/task/assign")
+            .send({ taskId: "test" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
         await request(baseURL)
             .put("/task/assign")
             .send({ taskId: "test", categoryId: "" })
@@ -174,8 +200,16 @@ describe("Test operations with tasks", () => {
             .send({ taskId: "", categoryId: "test" })
             .set("Cookie", tokenCookie)
             .expect(400);
-        await request(baseURL).put("/task/assign").send({ categoryId: "test" }).set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).put("/task/assign").send({ categoryId: "" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .put("/task/assign")
+            .send({ categoryId: "test" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
+        await request(baseURL)
+            .put("/task/assign")
+            .send({ categoryId: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
     });
 
     it("Should unassign a task from a category properly", async () => {
@@ -207,7 +241,9 @@ describe("Test operations with tasks", () => {
             .expect(200);
         expectTypeOf(tasksByCategoryNameResponse1.body).toMatchTypeOf<Task[]>();
 
-        const assignedTask = tasksByCategoryNameResponse1.body.find((task: Task) => task.id === newTaskId);
+        const assignedTask = tasksByCategoryNameResponse1.body.find(
+            (task: Task) => task.id === newTaskId
+        );
         expect(assignedTask).not.toBeUndefined();
 
         await request(baseURL)
@@ -222,14 +258,24 @@ describe("Test operations with tasks", () => {
             .expect(200);
         expectTypeOf(tasksByCategoryNameResponse2.body).toMatchTypeOf<Task[]>();
 
-        const unassignedTask = tasksByCategoryNameResponse2.body.find((task: Task) => task.id === newTaskId);
+        const unassignedTask = tasksByCategoryNameResponse2.body.find(
+            (task: Task) => task.id === newTaskId
+        );
         expect(unassignedTask).toBeUndefined();
     });
 
     it("Should respond with an error if you send an empty request body, taskId or categoryId when unassigning a task from a category", async () => {
         await request(baseURL).put("/task/unassign").set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).put("/task/unassign").send({ taskId: "" }).set("Cookie", tokenCookie).expect(400);
-        await request(baseURL).put("/task/unassign").send({ taskId: "test" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .put("/task/unassign")
+            .send({ taskId: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
+        await request(baseURL)
+            .put("/task/unassign")
+            .send({ taskId: "test" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
         await request(baseURL)
             .put("/task/unassign")
             .send({ taskId: "test", categoryId: "" })
@@ -245,7 +291,11 @@ describe("Test operations with tasks", () => {
             .send({ categoryId: "test" })
             .set("Cookie", tokenCookie)
             .expect(400);
-        await request(baseURL).put("/task/unassign").send({ categoryId: "" }).set("Cookie", tokenCookie).expect(400);
+        await request(baseURL)
+            .put("/task/unassign")
+            .send({ categoryId: "" })
+            .set("Cookie", tokenCookie)
+            .expect(400);
     });
 
     afterAll(async () => {

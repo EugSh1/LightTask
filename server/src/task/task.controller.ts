@@ -5,7 +5,7 @@ import { assignTaskSchema, newTaskSchema, taskIdSchema } from "./task.schema.js"
 import HTTPError from "../httpError.js";
 
 export default class TaskController {
-    public static async getTasks(req: Request, res: Response): Promise<void> {
+    static async getTasks(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const categoryName = req.query.categoryName as string;
@@ -20,7 +20,7 @@ export default class TaskController {
         });
     }
 
-    public static async createTask(req: Request, res: Response): Promise<void> {
+    static async createTask(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = newTaskSchema.parse(req.body);
@@ -31,7 +31,7 @@ export default class TaskController {
         });
     }
 
-    public static async toggleTaskStatus(req: Request, res: Response): Promise<void> {
+    static async toggleTaskStatus(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = taskIdSchema.parse(req.body);
@@ -42,7 +42,7 @@ export default class TaskController {
         });
     }
 
-    public static async deleteTask(req: Request, res: Response): Promise<void> {
+    static async deleteTask(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const id = req?.params.id;
@@ -56,7 +56,7 @@ export default class TaskController {
         });
     }
 
-    public static async assignTaskToCategory(req: Request, res: Response): Promise<void> {
+    static async assignTaskToCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = assignTaskSchema.parse(req.body);
@@ -67,7 +67,7 @@ export default class TaskController {
         });
     }
 
-    public static async unassignTaskFromCategory(req: Request, res: Response): Promise<void> {
+    static async unassignTaskFromCategory(req: Request, res: Response): Promise<void> {
         catchErrors(res, async () => {
             const userId = req?.userId as string;
             const parsedBody = assignTaskSchema.parse(req.body);

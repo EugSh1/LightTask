@@ -18,6 +18,6 @@ export default async function createTestUser() {
     return {
         name,
         password,
-        tokenCookie
+        tokenCookie: tokenCookie[0]
     };
 }

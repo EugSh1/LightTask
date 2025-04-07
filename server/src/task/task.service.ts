@@ -4,7 +4,7 @@ import { handleServiceError } from "../utils/errorUtils.js";
 const prisma = new PrismaClient();
 
 export default class TaskService {
-    public static async getAllTasks(userId: string): Promise<Task[]> {
+    static async getAllTasks(userId: string): Promise<Task[]> {
         try {
             return await prisma.task.findMany({
                 where: { userId }
@@ -14,7 +14,7 @@ export default class TaskService {
         }
     }
 
-    public static async getTasksByCategoryName(categoryName: string, userId: string): Promise<Task[]> {
+    static async getTasksByCategoryName(categoryName: string, userId: string): Promise<Task[]> {
         try {
             return await prisma.task.findMany({
                 where: {
@@ -31,7 +31,7 @@ export default class TaskService {
         }
     }
 
-    public static async createTask(task: Pick<Task, "name">, userId: string): Promise<Task> {
+    static async createTask(task: Pick<Task, "name">, userId: string): Promise<Task> {
         try {
             return await prisma.task.create({
                 data: {
@@ -44,7 +44,7 @@ export default class TaskService {
         }
     }
 
-    public static async toggleTaskStatus(id: string, userId: string): Promise<Task> {
+    static async toggleTaskStatus(id: string, userId: string): Promise<Task> {
         try {
             const task = await prisma.task.findUnique({ where: { id, userId } });
 
@@ -59,7 +59,7 @@ export default class TaskService {
         }
     }
 
-    public static async deleteTask(id: string, userId: string): Promise<void> {
+    static async deleteTask(id: string, userId: string): Promise<void> {
         try {
             await prisma.task.delete({
                 where: { id, userId }
@@ -69,7 +69,11 @@ export default class TaskService {
         }
     }
 
-    public static async assignTaskToCategory(taskId: string, categoryId: string, userId: string): Promise<void> {
+    static async assignTaskToCategory(
+        taskId: string,
+        categoryId: string,
+        userId: string
+    ): Promise<void> {
         try {
             const category = await prisma.category.findFirst({
                 where: { id: categoryId, userId }
@@ -92,7 +96,11 @@ export default class TaskService {
         }
     }
 
-    public static async unassignTaskFromCategory(taskId: string, categoryId: string, userId: string): Promise<void> {
+    static async unassignTaskFromCategory(
+        taskId: string,
+        categoryId: string,
+        userId: string
+    ): Promise<void> {
         try {
             const category = await prisma.category.findFirst({
                 where: { id: categoryId, userId }

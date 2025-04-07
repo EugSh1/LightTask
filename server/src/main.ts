@@ -9,7 +9,8 @@ import authRouter from "./auth/auth.router.js";
 
 const app = express();
 const PORT = process.env.PORT || 4200;
-const CLIENT_URL = process.env.NODE_ENV === "test" ? "*" : process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL =
+    process.env.NODE_ENV === "test" ? "*" : process.env.CLIENT_URL || "http://localhost:5173";
 
 const corsOptions = {
     origin: CLIENT_URL,
