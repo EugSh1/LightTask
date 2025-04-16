@@ -43,7 +43,7 @@ users to create, manage, and categorize tasks with an intuitive and easy-to-use 
 -   **Vitest**: For unit testing the backend logic.
 -   **Supertest**: For testing HTTP endpoints.
 
-![Made with](https://skillicons.dev/icons?i=react,tailwindcss,typescript,nodejs,expressjs,prisma,sqlite,vitest)
+![Made with](https://go-skill-icons.vercel.app/api/icons?i=react,reactquery,tailwindcss,typescript,nodejs,expressjs,prisma,sqlite,vitest&theme=dark)
 
 ## Usage
 
