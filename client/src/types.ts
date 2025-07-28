@@ -15,7 +15,7 @@ export interface ICategory {
 
 export interface IPopoverItem {
     title: string;
-    action: () => void;
+    action: () => void | Promise<void>;
     icon?: ReactNode;
 }
 

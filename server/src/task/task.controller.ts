@@ -47,7 +47,7 @@ export default class TaskController {
             const userId = req?.userId as string;
             const id = req?.params.id;
 
-            if (!id || !id.trim()) {
+            if (!id?.trim()) {
                 throw new HTTPError("The task id cannot be empty", 400);
             }
 

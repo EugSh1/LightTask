@@ -59,13 +59,13 @@ export default function useCategories() {
 
     function handleCreateCategory() {
         const name = prompt("Enter new category name");
-        if (!name || !name.trim()) return;
+        if (!name?.trim()) return;
         createCategory({ name });
     }
 
     async function handleRenameCategory(id: string) {
         const name = prompt("Enter new category name");
-        if (!name || !name.trim()) return;
+        if (!name?.trim()) return;
         const { name: newCategoryName } = await renameCategory({ id, name });
         return newCategoryName;
     }

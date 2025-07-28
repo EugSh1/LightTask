@@ -18,7 +18,7 @@ const allTasksCategory: ICategory = {
     userId: "all-tasks"
 };
 
-export default function Category({ categoryType }: IProps) {
+export default function Category({ categoryType }: Readonly<IProps>) {
     const { categoryName } = useParams();
     const [categoryData, setCategoryData] = useState<ICategory | null>(null);
     const { getCategoryByName } = useCategories();
@@ -42,7 +42,7 @@ export default function Category({ categoryType }: IProps) {
 
     async function handleCreateTask() {
         const newTaskName = prompt("Enter new task name");
-        if (!newTaskName || !newTaskName.trim() || !categoryData) return;
+        if (!newTaskName?.trim() || !categoryData) return;
 
         createTask({
             newTask: { name: newTaskName.trim() },
@@ -50,7 +50,10 @@ export default function Category({ categoryType }: IProps) {
         });
     }
 
-    const handleTaskMark = useCallback((id: string) => toggleTaskStatus({ id }), [toggleTaskStatus]);
+    const handleTaskMark = useCallback(
+        (id: string) => toggleTaskStatus({ id }),
+        [toggleTaskStatus]
+    );
     const handleTaskDelete = useCallback((id: string) => deleteTask({ id }), [deleteTask]);
 
     if (!categoryData) {
@@ -73,7 +76,9 @@ export default function Category({ categoryType }: IProps) {
                         />
                     ))
                 ) : (
-                    <p className="text-text-dimmed flex justify-center items-center h-36">No tasks yet</p>
+                    <p className="text-text-dimmed flex justify-center items-center h-36">
+                        No tasks yet
+                    </p>
                 )}
             </div>
             <button

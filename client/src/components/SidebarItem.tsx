@@ -13,7 +13,7 @@ interface IProps {
 
 const getCategoryPath = (name: string) => `${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(name)}`;
 
-export default function SidebarItem({ id, name, createCategoryPopoverItemsFn, getActiveClassFn }: IProps) {
+export default function SidebarItem({ id, name, createCategoryPopoverItemsFn, getActiveClassFn }: Readonly<IProps>) {
     return (
         <PopoverTrigger items={createCategoryPopoverItemsFn(id, name)}>
             <Link

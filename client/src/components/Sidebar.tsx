@@ -23,7 +23,9 @@ export default function Sidebar() {
         const newCategoryName = await renameCategory(id);
         if (!newCategoryName) return;
 
-        if (`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
+        if (
+            `${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname
+        ) {
             navigate(`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(newCategoryName)}`);
         }
     }
@@ -31,7 +33,9 @@ export default function Sidebar() {
     async function handleDeleteCategory(id: string, prevCategoryName: string) {
         deleteCategory(id);
 
-        if (`${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname) {
+        if (
+            `${ROUTE_PATHS.CATEGORY}/${encodeURIComponent(prevCategoryName)}` === location.pathname
+        ) {
             navigate(ROUTE_PATHS.HOME);
         }
     }
@@ -44,12 +48,12 @@ export default function Sidebar() {
         return [
             {
                 title: "Rename",
-                action: () => handleRenameCategory(id, name),
+                action: async () => await handleRenameCategory(id, name),
                 icon: <Pencil strokeWidth={iconStrokeWidth} />
             },
             {
                 title: "Delete",
-                action: () => handleDeleteCategory(id, name),
+                action: async () => await handleDeleteCategory(id, name),
                 icon: <Trash2 strokeWidth={iconStrokeWidth} />
             }
         ];
@@ -57,7 +61,11 @@ export default function Sidebar() {
 
     const accountItems: IPopoverItem[] = [
         { title: "Log out", action: logOut, icon: <LogOut strokeWidth={iconStrokeWidth} /> },
-        { title: "Delete account", action: deleteUser, icon: <UserRoundX strokeWidth={iconStrokeWidth} /> }
+        {
+            title: "Delete account",
+            action: deleteUser,
+            icon: <UserRoundX strokeWidth={iconStrokeWidth} />
+        }
     ];
 
     const getActiveClass = (path: string) => (location.pathname === path ? "bg-surface" : "");

@@ -7,7 +7,7 @@ interface IProps {
     onSubmit: (name: string, password: string) => void;
 }
 
-export default function AuthForm({ title, altLink, onSubmit }: IProps) {
+export default function AuthForm({ title, altLink, onSubmit }: Readonly<IProps>) {
     const nameInputRef = useRef<HTMLInputElement>(null);
     const passwordInputRef = useRef<HTMLInputElement>(null);
 

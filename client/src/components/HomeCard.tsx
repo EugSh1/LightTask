@@ -7,7 +7,7 @@ interface IProps {
     buttons?: IHomeCardButton[];
 }
 
-export default function HomeCard({ title, description, buttons = [] }: IProps) {
+export default function HomeCard({ title, description, buttons = [] }: Readonly<IProps>) {
     return (
         <div className="bg-surface rounded-md p-2 w-48 shadow-sm aspect-square flex flex-col justify-between">
             <div>

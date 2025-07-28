@@ -9,7 +9,7 @@ interface IProps {
     onTaskDelete: (taskId: string) => void;
 }
 
-function TaskCard({ task, onTaskMark, onTaskDelete }: IProps) {
+function TaskCard({ task, onTaskMark, onTaskDelete }: Readonly<IProps>) {
     function handleTaskMark() {
         onTaskMark(task.id);
     }
